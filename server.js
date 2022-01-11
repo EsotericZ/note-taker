@@ -11,66 +11,42 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, './public/notes.html'));
+  res.sendFile(path.join(__dirname, './public/notes.html'));
 });
 
 app.get('/api/notes', (req, res) => res.json(dbData));
 
-
-
 app.post('/api/notes', (req, res) => {
-    // Log that a POST request was received
-    console.info(`${req.method} request received to add a review`);
-  
-    // Destructuring assignment for the items in req.body
-    const { title, text } = req.body;
-  
-    // If all the required properties are present
-    if (title && text) {
-      // Variable for the object we will save
-        const newNote = {
-            title,
-            text,
-            // review_id: uuid(),
-        };
+  console.info(`${req.method} request received to add a note`);
+  const { title, text } = req.body;
 
+  if (title && text) {
+    const newNote = {
+      title,
+      text,
+      // review_id: uuid(),
+    };
 
-        // Convert the data to a string so we can save it
-        const noteString = JSON.stringify(newNote);
-
-        // Write the string to a file
-        // fs.writeFile(`./db/db.json`, noteString, (err) =>
-        fs.appendFile(`./db/db.json`, noteString, (err) =>
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+      if (err) {
+        console.log(`Error reading file from disk: ${err}`);
+      } else {
+        const databases = JSON.parse(data);
+        databases.push(newNote);
+        const noteString = JSON.stringify(databases);
+        fs.writeFile("./db/db.json", noteString, (err) =>
         err
-            ? console.error(err)
-            : console.log(
-                `Review for ${newNote.title} has been written to JSON file`
-            )
+          ? console.error(err)
+          : console.log("Note has been written to JSON file")
         );
-
-
-
-  
-      const response = {
-        status: 'success',
-        body: newNote,
-      };
-  
-      console.log(response);
-      res.status(201).json(response);
-    } else {
-      res.status(500).json('Error in posting review');
-    }
-  });
-  
-
-
-
-
+      } 
+    });
+  };
+});
 
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`);
