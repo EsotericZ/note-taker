@@ -48,6 +48,16 @@ app.post('/api/notes', (req, res) => {
   };
 });
 
+
+app.delete('/api/notes/:id', (req, res) => {
+  // put code here
+})
+
+
+app.get('*', (req, res) => {
+  res.redirect('index.html');
+});
+
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`);
 });
