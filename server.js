@@ -18,19 +18,19 @@ app.get('/notes', (req, res) => {
   res.sendFile(path.join(__dirname, './public/notes.html'));
 });
 
-app.get('/api/notes', (req, res) => res.json(dbData));
+app.get("/api/notes", function (req, res) {
+  res.sendFile(path.join(__dirname, "./db/db.json"));
+});
 
 app.post('/api/notes', (req, res) => {
   console.info(`${req.method} request received to add a note`);
   const { title, text } = req.body;
-
   if (title && text) {
     const newNote = {
       title,
       text,
       // review_id: uuid(),
     };
-
     fs.readFile('./db/db.json', 'utf8', (err, data) => {
       if (err) {
         console.log(`Error reading file from disk: ${err}`);
@@ -43,6 +43,7 @@ app.post('/api/notes', (req, res) => {
           ? console.error(err)
           : console.log("Note has been written to JSON file")
         );
+        res.json(JSON.parse(noteString));
       } 
     });
   };
