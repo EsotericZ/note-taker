@@ -15,8 +15,8 @@ Express is required.
       
 ## Usage
 Note taking abilites.  
-Click [here](https://esotericz.github.io/note-taker/) for live GitHub Pages  
 Click [here](https://cj-notetaker-v0001.herokuapp.com/) for live Heroku Page  
+  
 ![Alt text](/public/assets/images/screenshot.png?raw=true "Screenshot")  
       
 ## Contributing 
