@@ -49,6 +49,20 @@ app.post('/api/notes', (req, res) => {
     };
 });
 
+app.delete('/api/notes/:id', (req, res) => {
+    let noteString = JSON.parse(fs.readFileSync('./db/db.json', 'utf8'));
+    let noteID = (req.params.id).toString();
+    noteString = noteString.filter (note => {
+        return note.id != noteID;
+    })
+    fs.writeFileSync('./db/db.json', JSON.stringify(noteString));
+    res.json(noteString);
+});
+
+app.get('*', (req, res) => {
+    res.redirect('index.html');
+});
+
 app.listen(PORT, () => {
     console.log(`Example app listening at http://localhost:${PORT}`);
 });
